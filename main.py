@@ -9,6 +9,16 @@ sense = sense_hat()
 
 direction = 'U'
 lives = 3
+noOfGmaes = 0
+
+
+def correctOrientation():
+    correctPitch = 270
+    orientation = sense.get_orientation()
+    pitch = orientation["pitch"]
+    roll = orientation["roll"]
+    yaw = orientation["yaw"]
+
 
 
 def showArrow(direction):
@@ -87,6 +97,8 @@ def startGame(gameNo):
 def startProgram():
     sense.show(lives + " lives remaining")
     countdown(3)
+    noOfGames =+ 1
+    
 
 
 
