@@ -1,9 +1,9 @@
 import random
 
-from sense_hat import sense_hat
-from random import choice
 
-sense = sense_hat()
+from random import choice
+from sense_hat import SenseHat
+sense = SenseHat()
 
 # Global variables
 
