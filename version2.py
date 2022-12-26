@@ -96,7 +96,7 @@ while play == True:
 
    sense.set_pixels(whiteArrow)
    time.sleep(pause)
-   if setRandomOrientation() == angle:
+   if setRandomOrientation() == angle or angleFromStickDirection(stickDirection()) == angle:
        sense.set_pixels(greenArrow)
        score += 1
        pause -= 0.1
