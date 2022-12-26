@@ -94,11 +94,7 @@ def getDirection():
 def startGame(gameNo):
 
 
-def startProgram():
-    sense.show(lives + " lives remaining")
-    countdown(3)
-    noOfGames =+ 1
-    
+
 
 
 
