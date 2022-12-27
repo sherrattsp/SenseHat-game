@@ -104,5 +104,5 @@ while play == True:
         sense.set_pixels(redArrow)
         pause += 0.1
         play = False
-
-sense.show_message("Game Over, you scored: " + score, text_colour = (255, 0, 0))
+sense.set_rotation(0)
+sense.show_message("Game Over! Score: " + str(score), text_colour=[255, 0, 0])
