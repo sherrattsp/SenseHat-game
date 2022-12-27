@@ -52,7 +52,6 @@ def setRandomOrientation():
     global angle
     angle = random.choice([0, 90, 180, 270])
     sense.set_rotation(angle)
-    return angle
 
 pause = 3 #initial time between turns
 
@@ -93,10 +92,10 @@ def angleFromStickDirection(stickDirection):
 while play == True:
     
     
-
+   setRandomOrientation()
    sense.set_pixels(whiteArrow)
    time.sleep(pause)
-   if setRandomOrientation() == angle or angleFromStickDirection(stickDirection()) == angle:
+   if angle == angle or angleFromStickDirection(stickDirection()) == angle:
        sense.set_pixels(greenArrow)
        score += 1
        pause -= 0.1
