@@ -71,7 +71,7 @@ def scoreIncrease():
     sense.set_pixels(greenArrow)
     time.sleep(1)
     sense.clear()
-    startGame(lives, score, pause)
+    startJoyStickGame(lives, score, pause)
 
 def scoreDecrease():
     global lives
@@ -79,7 +79,7 @@ def scoreDecrease():
     sense.set_pixels(redArrow)
     time.sleep(1)
     sense.clear()
-    startGame(lives, score, pause)
+    startJoyStickGame(lives, score, pause)
 def upArrow(angle):
     if angle == 0:
        scoreIncrease()
@@ -108,8 +108,9 @@ def gameOver(score):
     time.sleep(1)
     sense.clear()
 
-
-def startGame(lives, score, pause):
+def startMotionGame():
+    sense.show_message("Motion Game", text_colour=[0, 255, 0])
+def startJoyStickGame(lives, score, pause):
     play = True
     while play == True:
 
@@ -162,9 +163,26 @@ def startGame(lives, score, pause):
 
 
 sense.clear()
-sense.show_message("Press joystick to start", text_colour=[255, 255, 255])
-sense.stick.wait_for_event()
-startGame(lives, score, pause)
+sense.show_message("Press joystick to start or shake for motion control", text_colour=[255, 255, 255])
+sense.stick.direction_middle = startJoyStickGame(lives, score, pause)
+
+while True:
+    acceleration = sense.get_accelerometer_raw()
+    x = acceleration['x']
+    y = acceleration['y']
+    z = acceleration['z']
+
+    x = abs(x)
+    y = abs(y)
+    z = abs(z)
+
+    if x > 1 or y > 1 or z > 1:
+        startMotionGame()
+
+    else:
+        pass
+
+
 
 
 
