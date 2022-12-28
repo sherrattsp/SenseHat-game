@@ -108,6 +108,32 @@ def gameOver(score):
     time.sleep(1)
     sense.clear()
 
+
+    sense.show_message("Shake to restart or press joystick down", text_colour=[255, 255, 255])
+
+    while True:
+        events = sense.stick.get_events()
+        for event in events:
+            if event.action == "pressed":
+                startJoyStickGame(lives, score, pause)
+            else:
+                continue
+        acceleration = sense.get_accelerometer_raw()
+        x = acceleration['x']
+        y = acceleration['y']
+        z = acceleration['z']
+
+        x = abs(x)
+        y = abs(y)
+        z = abs(z)
+
+        if x > 1 or y > 1 or z > 1:
+            startMotionGame()
+
+        else:
+            pass
+
+
 def detectOrientation():
     #gets the orientation of the sense hat and returns the angle back as the closest multiple of 90
     # Get the pitch, roll, and yaw angles in degrees
