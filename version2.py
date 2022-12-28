@@ -57,54 +57,85 @@ pause = 3 #initial time between turns
 
 score = 0
 angle = 0
+lives = 3
 
 play = True
 
-def stickDirection():
 
-    #TODO refactor code so only latest joystick input is returned
+def checkInput():
     for event in sense.stick.get_events():
-        if event.action == 'pressed':
-            if event.direction == 'up':
-                return 'up'
-            elif event.direction == 'down':
-                return 'down'
-            elif event.direction == 'left':
-                return 'left'
-            elif event.direction == 'right':
-                return 'right'
-            elif event.direction == 'middle':
-                return 'middle'
-            else:
-                return 'none'
+        if event.action == "pressed":
+            if event.direction == "up":
+                if angle == 0:
+                    return True
+                else:
+                    return False
+            if event.direction == "right":
+                if angle == 90:
+                    return True
+                else:
+                    return False
+            if event.direction == "down":
+                if angle == 180:
+                    return True
+                else:
+                    return False
+            if event.direction == "left":
+                if angle == 270:
+                    return True
+                else:
+                    return False
+            if event.direction == "middle":
+                return False
+
+def gameOver():
+    sense.show_message("Game Over", text_colour=[255, 0, 0])
+    sense.show_message("Score: " + str(score), text_colour=[255, 0, 0])
+    time.sleep(1)
+    sense.clear()
+
+def startGame(lives, score):
+    play = True
+    while play == True:
+
+        '''
+        check if lives remain
+        set random orientation
+        show arrow in specified orientation
+        start timer
+        wait for input
+        if input is correct, add 1 to score if in specified time
+        '''
+
+        if lives > 0:
+            setRandomOrientation()
+            sense.set_pixels(whiteArrow)
+            startTimer = time.time()
+            checkInput()
+        else:
+            gameOver()
+            play = False
+            break
+        if checkInput() == True and time.time() - startTimer < pause:
+                score += 1
+                sense.set_pixels(greenArrow)
+                time.sleep(1)
+                sense.clear()
+        else:
+            lives -= 1
+            sense.set_pixels(redArrow)
+            time.sleep(1)
+            sense.clear()
 
 
-def angleFromStickDirection(stickDirection):
-    if stickDirection == 'up':
-        return 0
-    elif stickDirection == 'right':
-        return 90
-    elif stickDirection == 'down':
-        return 180
-    elif stickDirection == 'left':
-        return 270
-    else:
-        return 'none'
+sense.show_message("Press joystick to start", text_colour=[255, 0, 0])
+sense.stick.wait_for_event()
+startGame(lives, score)
 
-while play == True:
-    
-    
-   setRandomOrientation()
-   sense.set_pixels(whiteArrow)
-   timerStart = time.time()
-   if (angle == angle or angleFromStickDirection(stickDirection()) == angle) and (time.time() - timerStart) < pause:
-       sense.set_pixels(greenArrow)
-       score += 1
-       pause -= 0.1
-   
-   else:
-        sense.set_pixels(redArrow)
-        pause += 0.1
-        play = False
-sense.set_rotation(0)
-sense.show_message("Game Over! Score: " + str(score), text_colour=[255, 0, 0])
+
+
+
+
+
+
+
