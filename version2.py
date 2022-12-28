@@ -108,8 +108,36 @@ def gameOver(score):
     time.sleep(1)
     sense.clear()
 
+def detectOrientation():
+    #gets the orientation of the sense hat and returns the angle back as the closest multiple of 90
+    # Get the pitch, roll, and yaw angles in degrees
+    orientation = sense.get_orientation_degrees()
+    pitch = orientation['pitch']
+
+    # Round the pitch angle to the closest multiple of 90
+    pitch = round(pitch / 90) * 90
+    return pitch
+
 def startMotionGame():
-    sense.show_message("Motion Game", text_colour=[0, 255, 0])
+    play = True
+    while play == True:
+        if lives > 0:
+            setRandomOrientation()
+            sense.set_pixels(whiteArrow)
+            startTimer = time.time()
+            detectInputs = True
+            while detectInputs == True:
+                if detectOrientation() == angle:
+                    scoreIncrease()
+                    detectInputs = False
+                elif time.time() - startTimer > pause:
+                    detectInputs = False
+                    scoreDecrease()
+        else:
+            gameOver(score)
+            play = False
+            break
+
 def startJoyStickGame(lives, score, pause):
     play = True
     while play == True:
