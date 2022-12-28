@@ -65,11 +65,14 @@ play = True
 
 def scoreIncrease():
     global score
+    global pause
     score += 1
+    pause *= 0.95 # decrease pause by 5%
     sense.set_pixels(greenArrow)
     time.sleep(1)
     sense.clear()
     startGame(lives, score, pause)
+
 def scoreDecrease():
     global lives
     lives -= 1
