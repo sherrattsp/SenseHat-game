@@ -164,9 +164,15 @@ def startJoyStickGame(lives, score, pause):
 
 sense.clear()
 sense.show_message("Press joystick to start or shake for motion control", text_colour=[255, 255, 255])
-sense.stick.direction_middle = startJoyStickGame(lives, score, pause)
+
 
 while True:
+    events = sense.stick.get_events()
+    for event in events:
+        if event.action == "pressed":
+            startJoyStickGame(lives, score, pause)
+        else:
+            continue
     acceleration = sense.get_accelerometer_raw()
     x = acceleration['x']
     y = acceleration['y']
