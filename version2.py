@@ -88,13 +88,14 @@ def checkInput():
             if event.direction == "middle":
                 return False
 
-def gameOver():
+def gameOver(score):
+    sense.set_rotation(0)
     sense.show_message("Game Over", text_colour=[255, 0, 0])
     sense.show_message("Score: " + str(score), text_colour=[255, 0, 0])
     time.sleep(1)
     sense.clear()
 
-def startGame(lives, score):
+def startGame(lives, score, pause):
     play = True
     while play == True:
 
@@ -113,7 +114,7 @@ def startGame(lives, score):
             startTimer = time.time()
             checkInput()
         else:
-            gameOver()
+            gameOver(score)
             play = False
             break
         if checkInput() == True and time.time() - startTimer < pause:
@@ -121,16 +122,18 @@ def startGame(lives, score):
                 sense.set_pixels(greenArrow)
                 time.sleep(1)
                 sense.clear()
+                startGame(lives, score, pause)
         else:
             lives -= 1
             sense.set_pixels(redArrow)
             time.sleep(1)
             sense.clear()
+            startGame(lives, score, pause)
 
 
 sense.show_message("Press joystick to start", text_colour=[255, 0, 0])
 sense.stick.wait_for_event()
-startGame(lives, score)
+startGame(lives, score, pause)
 
 
 
