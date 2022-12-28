@@ -58,48 +58,46 @@ pause = 3 #initial time between turns
 score = 0
 angle = 0
 lives = 3
-correctRotation = False
+
 
 play = True
 
 
-def checkInput():
-    for event in sense.stick.get_events():
-        if event.action == "pressed":
-            if event.direction == "up":
-                if angle == 0:
-                    return True
-                else:
-                    return False
-            if event.direction == "right":
-                if angle == 90:
-                    return True
-                else:
-                    return False
-            if event.direction == "down":
-                if angle == 180:
-                    return True
-                else:
-                    return False
-            if event.direction == "left":
-                if angle == 270:
-                    return True
-                else:
-                    return False
-            if event.direction == "middle":
-                return False
-
-def correctInput(direction, angle):
-    if direction == "up" and angle == 0:
-        correctRotation = True
-    elif direction == "right" and angle == 90:
-        correctRotation = True
-    elif direction == "down" and angle == 180:
-        correctRotation = True
-    elif direction == "left" and angle == 270:
-        correctRotation = True
+def scoreIncrease():
+    global score
+    score += 1
+    sense.set_pixels(greenArrow)
+    time.sleep(1)
+    sense.clear()
+    startGame(lives, score, pause)
+def scoreDecrease():
+    global lives
+    lives -= 1
+    sense.set_pixels(redArrow)
+    time.sleep(1)
+    sense.clear()
+    startGame(lives, score, pause)
+def upArrow(angle):
+    if angle == 0:
+       scoreIncrease()
     else:
-        correctRotation = False
+        scoreDecrease()
+def downArrow(angle):
+    if angle == 180:
+        scoreIncrease()
+    else:
+        scoreDecrease()
+def leftArrow(angle):
+    if angle == 270:
+        scoreIncrease()
+    else:
+        scoreDecrease()
+def rightArrow(angle):
+    if angle == 90:
+        scoreIncrease()
+    else:
+        scoreDecrease()
+
 def gameOver(score):
     sense.set_rotation(0)
     sense.show_message("Game Over", text_colour=[255, 0, 0])
@@ -125,27 +123,39 @@ def startGame(lives, score, pause):
             setRandomOrientation()
             sense.set_pixels(whiteArrow)
             startTimer = time.time()
-            while startTimer + pause > time.time():
-                checkInput()
-                if checkInput() == True:
-                    break
+            detectInputs = True
+            while detectInputs == True:
+                for event in sense.stick.get_events():
+                    if event.action == "pressed":
+                        if event.direction == "up":
+                            upArrow(angle)
+                            detectInputs = False
+                        elif event.direction == "down":
+                            downArrow(angle)
+                            detectInputs = False
+                        elif event.direction == "left":
+                            leftArrow(angle)
+                            detectInputs = False
+                        elif event.direction == "right":
+                            rightArrow(angle)
+                            detectInputs = False
+                        elif event.direction == "middle":
+                            gameOver(score)
+                            detectInputs = False
+                    elif event.action == "held":
+                        if event.direction == "middle":
+                            gameOver(score)
+                            detectInputs = False
+                if time.time() - startTimer > pause:
+                    detectInputs = False
+                    scoreDecrease()
 
         else:
             gameOver(score)
             play = False
             break
-        if correctRotation == True and time.time() - startTimer < pause:
-                score += 1
-                sense.set_pixels(greenArrow)
-                time.sleep(1)
-                sense.clear()
-                startGame(lives, score, pause)
-        else:
-            lives -= 1
-            sense.set_pixels(redArrow)
-            time.sleep(1)
-            sense.clear()
-            startGame(lives, score, pause)
+
+
 
 sense.clear()
 sense.show_message("Press joystick to start", text_colour=[255, 255, 255])
