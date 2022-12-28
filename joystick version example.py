@@ -1,4 +1,5 @@
-
+from sense_hat import SenseHat
+sense = SenseHat()
 
 # additional code to use if you wanted to make use of the SenseHAT emulator online combined with the joystick/keyboard
 # our modified while loop which also incorporates some bonus lives code

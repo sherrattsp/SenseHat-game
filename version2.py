@@ -9,7 +9,7 @@ sense = SenseHat()
 sense.clear()
 
 
-angle = 0
+
 
 w = (255, 255, 255)
 r = (255, 0, 0)
@@ -61,6 +61,8 @@ angle = 0
 play = True
 
 def stickDirection():
+
+    #TODO refactor code so only latest joystick input is returned
     for event in sense.stick.get_events():
         if event.action == 'pressed':
             if event.direction == 'up':
