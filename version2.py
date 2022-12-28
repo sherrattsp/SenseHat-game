@@ -153,6 +153,7 @@ def startGame(lives, score, pause):
                     detectInputs = False
                     scoreDecrease()
 
+
         else:
             gameOver(score)
             play = False
